@@ -1,6 +1,8 @@
 # M03 · Lab 02: Same corpus on Amazon Bedrock Knowledge Bases
 
 > Module: [RAG: Retrieval-Augmented Generation](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`): create, query and tear down scripts, tested offline. Running it creates billable AWS resources; read `NOTES.md` first.
 
 ## Goal
 Repeat the corpus with Bedrock Knowledge Bases and compare setup effort, quality and cost with your pgvector build.

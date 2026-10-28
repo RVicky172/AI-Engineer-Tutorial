@@ -11,6 +11,8 @@ Almost every customer deployment connects the agent to private knowledge (runboo
 4. **Check** — answer the self-check questions out loud without notes, then update [PROGRESS.md](../PROGRESS.md).
 
 ## Labs
+Reference solutions are built and tested. Labs 01, 03 and 04 were run live with local models (results in each lab's `results.md`); Lab 02 is scripted and tested offline. Read [LEARNINGS.md](LEARNINGS.md) after the labs; run every offline check with `labs/check.sh`.
+
 - [ ] [Lab 01: RAG pipeline on pgvector + chunk-size experiment](labs/lab-01-pgvector-rag-chunking/README.md)
 - [ ] [Lab 02: Same corpus on Amazon Bedrock Knowledge Bases](labs/lab-02-bedrock-knowledge-bases/README.md)
 - [ ] [Lab 03: Document-level access control](labs/lab-03-rag-access-control/README.md)
@@ -27,8 +29,13 @@ M03-rag/
 ├── docs/
 │   ├── guide.md       ← study guide
 │   └── notes.md       ← your notes
+├── LEARNINGS.md       ← cross-lab lessons
 └── labs/
     ├── SETUP.md       ← environment setup
+    ├── check.sh       ← every offline quality gate (starts pgvector)
+    ├── corpus/        ← 77 shared documents (Markdown + PDFs, with access groups)
+    ├── golden.yaml    ← 25 questions with relevant docs and evidence phrases
+    ├── common/        ← ragkit: chunker, embedders, pgvector store, BM25 + RRF, metrics
     ├── lab-01-pgvector-rag-chunking/
     ├── lab-02-bedrock-knowledge-bases/
     ├── lab-03-rag-access-control/

@@ -62,7 +62,9 @@ LIMIT 5;
 
 **Hybrid search:** vectors are great at meaning, bad at exact identifiers (error codes, hostnames, `INC0012345`). BM25/keyword is the opposite. Combine with **Reciprocal Rank Fusion**: `score = Σ 1 / (60 + rank_i)`.
 
-**Reranking:** retrieve 20-50 candidates cheaply, then a cross-encoder or rerank model scores each (query, chunk) pair jointly and keeps the top 5. Usually the biggest quality jump for the effort.
+**Reranking:** retrieve 20-50 candidates cheaply, then a cross-encoder or rerank model scores each (query, chunk) pair jointly and keeps the top 5. Usually the biggest quality jump for the effort. Rerankers have a training distribution: one trained on web search can prefer a chunk that repeats the question's words over the chunk that answers it, so read the questions it makes worse (Lab 04 found two).
+
+**Filtered ANN search can return nothing.** An HNSW index returns its `ef_search` nearest rows (40 by default in pgvector), and a `WHERE` filter is applied to *those*. A user who may read only a few chunks can get zero results although permitted matches exist. It never shows on small tables (the planner uses a sequential scan). In pgvector 0.8+ set `hnsw.iterative_scan` (Lab 03 reproduces it: 0 results without, 5 with).
 
 ## 4. Stores on AWS
 | Option | When |
@@ -71,9 +73,11 @@ LIMIT 5;
 | **OpenSearch** (managed or Serverless) | large scale, hybrid search built in, existing OpenSearch skills |
 | **Bedrock Knowledge Bases** | managed ingestion/chunking/sync + Retrieve/RetrieveAndGenerate APIs; less control, faster start. Supports several vector store back-ends — check current options and pricing |
 
+Price the vector store's *billing model*, not just its rate: some bill per hour while they exist (OpenSearch Serverless capacity units, a running database), others per GB stored and per query (Amazon S3 Vectors). For a lab, a pilot or a quiet tenant, an idle per-hour store is most of the bill.
+
 ## 5. Access control in RAG
 - Attach ACL metadata (`allowed_groups`, `tenant_id`) to every chunk at ingestion, from the source system's permissions.
-- **Filter inside the query, before top-k.** Post-filtering leaks (data reaches your process) and hurts recall (top-5 might all be filtered out).
+- **Filter inside the query, before top-k, in every retrieval path.** Post-filtering leaks (data reaches your process) and hurts recall (top-5 might all be filtered out). Hybrid search has two paths: a BM25 ranker in your code must only score chunks the database says the user may read.
 - The user's identity/groups come from the **authenticated request**, never from the model or prompt.
 - Multi-tenant: separate indexes or mandatory tenant filter; test for leakage explicitly.
 - Keep ACLs in sync when source permissions change.
@@ -89,6 +93,8 @@ Build a **golden set**: 25-100 real questions with the IDs of relevant documents
 | **Answer relevance** | does the answer address the question? |
 
 Evaluate retrieval and generation **separately** — that's how you know which half to fix.
+
+A metric that is 100% for every configuration measures nothing. On a small corpus, document-level recall@5 saturates; check whether the retrieved *chunk* contains the answer (store an exact evidence phrase per question: Lab 01's `evidence@5`), and add realistic distractors (superseded versions, near-duplicate topics) to the corpus.
 
 ## 7. Common problems and fixes
 | Problem | Fix |

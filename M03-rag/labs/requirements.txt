@@ -27,3 +27,4 @@ moto
 -e ./lab-01-pgvector-rag-chunking
 -e ./lab-03-rag-access-control
 -e ./lab-04-reranker
+-e ./lab-02-bedrock-knowledge-bases
