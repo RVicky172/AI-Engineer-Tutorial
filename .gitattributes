@@ -1,0 +1,4 @@
+# Binary: line-ending conversion would corrupt their byte offsets
+*.pdf binary
+# Shell scripts must keep LF, or bash fails with "$'\r': command not found"
+*.sh text eol=lf
