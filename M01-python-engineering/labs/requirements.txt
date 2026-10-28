@@ -13,3 +13,4 @@ respx
 moto[s3,secretsmanager]
 ruff
 mypy
+boto3-stubs[s3,secretsmanager]

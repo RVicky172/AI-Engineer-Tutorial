@@ -1,6 +1,8 @@
 # M01 · Lab 01: FastAPI chat service with SSE streaming
 
 > Module: [Python and Software Engineering Fundamentals](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`). Try the lab yourself first for 60-90 minutes, then compare. See [../../LEARNINGS.md](../../LEARNINGS.md) for how to study it.
 
 ## Goal
 Build a FastAPI service with a `/chat` endpoint that streams tokens via Server-Sent Events, validates input with Pydantic, and has 80%+ test coverage.

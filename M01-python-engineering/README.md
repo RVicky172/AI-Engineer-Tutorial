@@ -11,6 +11,8 @@ Python is the main language for agent logic, integrations and glue code. You are
 4. **Check** — answer the self-check questions out loud without notes, then update [PROGRESS.md](../PROGRESS.md).
 
 ## Labs
+Reference solutions are built and tested. Read [LEARNINGS.md](LEARNINGS.md) after the labs; run every check with `labs/check.sh`.
+
 - [ ] [Lab 01: FastAPI chat service with SSE streaming](labs/lab-01-fastapi-sse-chat/README.md)
 - [ ] [Lab 02: Resilient HTTP client wrapper](labs/lab-02-resilient-http-client/README.md)
 - [ ] [Lab 03: Test AWS code with moto](labs/lab-03-moto-aws-testing/README.md)

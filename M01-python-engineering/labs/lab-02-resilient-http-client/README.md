@@ -1,6 +1,8 @@
 # M01 · Lab 02: Resilient HTTP client wrapper
 
 > Module: [Python and Software Engineering Fundamentals](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`). Try the lab yourself first for 60-90 minutes, then compare. See [../../LEARNINGS.md](../../LEARNINGS.md) for how to study it.
 
 ## Goal
 Write a reusable async HTTP client with retries, exponential backoff with jitter, a circuit breaker and per-call timeouts; unit-test every failure path with respx.

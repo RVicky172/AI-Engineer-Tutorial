@@ -1,0 +1,46 @@
+[project]
+name = "chat-service"
+version = "0.1.0"
+description = "M01 Lab 01: FastAPI chat service that streams tokens over Server-Sent Events"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "sse-starlette",
+    "pydantic>=2",
+    "pydantic-settings",
+    "structlog",
+]
+
+[dependency-groups]
+dev = ["pytest", "pytest-asyncio", "pytest-cov", "httpx", "ruff", "mypy"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chat_service"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "--cov=chat_service --cov-report=term-missing --cov-fail-under=80"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# E/F: errors, I: import order, B: bugbear, UP: modern syntax, ASYNC: async pitfalls,
+# S: security (bandit), SIM: simplifications, RUF: ruff-specific
+select = ["E", "F", "I", "B", "UP", "ASYNC", "S", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # assert is how pytest works
+
+[tool.mypy]
+strict = true
+mypy_path = "src"
