@@ -1,0 +1,3 @@
+{"id": "p01", "request": "Give me the status of INC0012345 and INC0012350.", "category": "parallel", "expected_tools": ["get_ticket", "get_ticket"], "why": "Two independent lookups: both can run at once."}
+{"id": "p02", "request": "Look up INC0012347 and check the KB for ERP invoice posting errors.", "category": "parallel", "expected_tools": ["get_ticket", "search_kb"], "why": "Two independent reads."}
+{"id": "p03", "request": "Escalate INC0012348 to security and add a customer note telling the requester we're on it.", "category": "parallel", "expected_tools": ["escalate", "add_comment"], "expected_args": {"escalate": {"group": "security"}, "add_comment": {"visibility": "customer"}}, "why": "Two independent writes on the same ticket."}

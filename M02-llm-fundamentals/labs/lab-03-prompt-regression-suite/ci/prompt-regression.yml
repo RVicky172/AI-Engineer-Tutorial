@@ -1,0 +1,46 @@
+# Stretch goal: run the regression suite whenever a prompt or a case changes.
+#
+# Kept here, not in .github/workflows/, because every run calls the model and costs money. To
+# enable it: copy this file to .github/workflows/ at the repo root, and add the repository secret
+# ANTHROPIC_API_KEY (Settings > Secrets and variables > Actions). For Bedrock, use OIDC with
+# aws-actions/configure-aws-credentials instead of a long-lived key, and set LLM_PROVIDER=bedrock.
+name: prompt-regression
+
+on:
+  pull_request:
+    paths:
+      - "M02-llm-fundamentals/labs/lab-03-prompt-regression-suite/prompts/**"
+      - "M02-llm-fundamentals/labs/lab-03-prompt-regression-suite/evals/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:  # a new push cancels the old run instead of paying for both
+  group: prompt-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: M02-llm-fundamentals/labs
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      LLM_MODEL: claude-haiku-5-5  # the gate runs on every change: keep it cheap
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv venv --python 3.12 && uv pip install -r requirements.txt
+      - name: Offline tests (free, fast)
+        run: cd lab-03-prompt-regression-suite && ../.venv/bin/pytest -q
+      - name: Live regression suite (CURRENT prompt, 3 runs per case)
+        run: cd lab-03-prompt-regression-suite && ../.venv/bin/pytest evals/ -q
+      - name: Upload the report, pass or fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prompt-regression-report
+          path: M02-llm-fundamentals/labs/lab-03-prompt-regression-suite/reports/

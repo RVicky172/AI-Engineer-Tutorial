@@ -1,6 +1,8 @@
 # M02 · Lab 01: One extraction task, three techniques
 
 > Module: [LLM Fundamentals, Prompting, Tool Calling and Structured Outputs](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`). Try the lab yourself first for 60-90 minutes, then compare. See [../../LEARNINGS.md](../../LEARNINGS.md) for how to study it.
 
 ## Goal
 Solve the same extraction task with a plain prompt, few-shot prompting and tool-use with a schema. Measure accuracy and token cost on 30 inputs.

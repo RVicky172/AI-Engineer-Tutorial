@@ -1,7 +1,19 @@
-boto3
-anthropic
+# One shared venv for all M02 labs. Run from this labs/ folder:
+#   pip install -r requirements.txt   (or: uv pip install -r requirements.txt)
+anthropic[bedrock]>=2.3
 pydantic>=2
 pyyaml
 python-dotenv
+
+# Dev tools: tests, coverage, lint, types
 pytest
-tabulate
+pytest-cov
+ruff
+mypy
+types-PyYAML
+
+# The shared helpers and the three labs, editable, so `python -m <lab>` and imports just work
+-e ./common
+-e ./lab-01-extraction-three-ways
+-e ./lab-02-tool-design-it-support
+-e ./lab-03-prompt-regression-suite

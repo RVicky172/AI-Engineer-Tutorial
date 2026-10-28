@@ -1,6 +1,8 @@
 # M02 · Lab 03: Prompt regression suite
 
 > Module: [LLM Fundamentals, Prompting, Tool Calling and Structured Outputs](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`). Try the lab yourself first for 60-90 minutes, then compare. See [../../LEARNINGS.md](../../LEARNINGS.md) for how to study it.
 
 ## Goal
 Build a 20-case regression suite that runs on every prompt change.

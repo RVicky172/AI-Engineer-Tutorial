@@ -1,6 +1,8 @@
 # M02 · Lab 02: Tool design for an IT-support agent
 
 > Module: [LLM Fundamentals, Prompting, Tool Calling and Structured Outputs](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`). Try the lab yourself first for 60-90 minutes, then compare. See [../../LEARNINGS.md](../../LEARNINGS.md) for how to study it.
 
 ## Goal
 Design five tools (get_ticket, search_kb, restart_service, add_comment, escalate) and measure how often the model picks the right one.
