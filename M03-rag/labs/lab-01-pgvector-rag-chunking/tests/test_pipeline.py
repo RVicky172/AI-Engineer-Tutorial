@@ -9,10 +9,11 @@ from llm_common import Settings
 from llm_common.fake import FakeMessages, make_message
 
 from rag_pipeline.cli import LABS, main
-from rag_pipeline.pipeline import Mode, Retriever, evaluate, ingest, table_name
+from rag_pipeline.pipeline import evaluate, ingest, table_name
 from ragkit.corpus import Document, load_corpus
 from ragkit.embedding import Embedder, HashEmbedder
 from ragkit.golden import Question, load_golden
+from ragkit.retrieval import Mode, Retriever
 from ragkit.store import PgVectorStore, connect
 
 EMB = HashEmbedder(dim=128)  # deterministic and lexical: tests never download a model

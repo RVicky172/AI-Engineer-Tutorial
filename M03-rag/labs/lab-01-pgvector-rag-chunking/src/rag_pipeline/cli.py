@@ -7,13 +7,14 @@ from typing import Any
 import psycopg
 from llm_common import MessagesAPI, Settings, make_messages_api
 
-from rag_pipeline.pipeline import IngestStats, Mode, Retriever, evaluate, ingest, table_name
+from rag_pipeline.pipeline import IngestStats, evaluate, ingest, table_name
 from rag_pipeline.report import Run, render
 from ragkit.corpus import load_corpus
 from ragkit.embedding import Embedder, make_embedder
 from ragkit.generation import answer
 from ragkit.golden import check_evidence, load_golden
 from ragkit.metrics import summarise
+from ragkit.retrieval import Mode, Retriever
 from ragkit.store import PgVectorStore, connect
 
 LABS = Path(__file__).resolve().parents[3]

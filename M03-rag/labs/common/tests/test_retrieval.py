@@ -20,7 +20,8 @@ from ragkit.metrics import (
     reciprocal_rank,
     summarise,
 )
-from ragkit.store import Hit, PgVectorStore
+from ragkit.retrieval import Mode, Retriever
+from ragkit.store import Hit, PgVectorStore, build_table
 from tests.conftest import make_doc
 
 
@@ -176,3 +177,26 @@ def test_iterative_scan_returns_rows_an_hnsw_filter_would_hide(
         assert store.readable_chunk_ids(["security"]) == {f"sec#{i}" for i in range(5)}
     finally:
         conn.execute("RESET enable_seqscan")
+
+
+def test_build_table_loads_and_indexes_the_corpus(
+    conn: psycopg.Connection[Any], docs: list[Document]
+) -> None:
+    emb = HashEmbedder(dim=64)
+    store = build_table(conn, docs, emb, table="test_ragkit_build", size=256)
+    assert store.count() > len(docs)
+    assert (
+        store.search(emb.embed_query("printer E-340 fuser"), 1)[0].doc_id
+        == "kb-printer-error-codes"
+    )
+
+
+@pytest.mark.parametrize("mode", list(Mode))
+def test_retriever_searches_three_ways(
+    conn: psycopg.Connection[Any], docs: list[Document], mode: Mode
+) -> None:
+    emb = HashEmbedder(dim=256)  # fewer hash collisions than 64
+    retriever = Retriever(build_table(conn, docs, emb, table="test_ragkit_modes", size=256), emb)
+    hits = retriever.search("What does printer error E-340 mean?", mode, k=3)
+    assert len(hits) == 3
+    assert hits[0].doc_id == "kb-printer-error-codes"

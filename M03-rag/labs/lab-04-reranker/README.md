@@ -1,6 +1,8 @@
 # M03 · Lab 04: Add a reranker and measure it
 
 > Module: [RAG: Retrieval-Augmented Generation](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`, `results.md`). Try the lab yourself first for 60-90 minutes, then compare.
 
 ## Goal
 Add a reranker and measure the change in retrieval and answer quality on the 25-question golden set.

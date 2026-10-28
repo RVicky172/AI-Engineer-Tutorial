@@ -6,25 +6,16 @@ Fusion then only ever sees permitted chunks."""
 
 import re
 from collections.abc import Sequence
-from enum import StrEnum
 from typing import Any
 
 import psycopg
 
 from rag_acl.identity import User
-from ragkit.chunking import chunk_corpus
 from ragkit.corpus import Document
 from ragkit.embedding import Embedder
 from ragkit.hybrid import BM25Index, rrf
-from ragkit.store import Hit, PgVectorStore
-
-CANDIDATES = 20
-
-
-class Mode(StrEnum):
-    VECTOR = "vector"
-    BM25 = "bm25"
-    HYBRID = "hybrid"
+from ragkit.retrieval import CANDIDATES, Mode
+from ragkit.store import Hit, PgVectorStore, build_table
 
 
 def table_name(embedder: Embedder, size: int) -> str:
@@ -37,14 +28,7 @@ def ingest(
 ) -> PgVectorStore:
     """Chunks inherit `allowed_groups` from their document at ingestion (see PgVectorStore.add):
     permissions must travel with every chunk, because retrieval never looks at documents."""
-    chunks = chunk_corpus(
-        list(docs), max_tokens=size, overlap_tokens=size // 8, count=embedder.count_tokens
-    )
-    store = PgVectorStore(conn, table_name(embedder, size), embedder.dim)
-    store.reset()
-    store.add(chunks, embedder.embed_documents([c.text for c in chunks]), docs)
-    store.build_index()
-    return store
+    return build_table(conn, docs, embedder, table=table_name(embedder, size), size=size)
 
 
 class SecureRetriever:

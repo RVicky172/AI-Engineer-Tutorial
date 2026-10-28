@@ -5,7 +5,6 @@ import re
 import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from enum import StrEnum
 from typing import Any
 
 import psycopg
@@ -14,18 +13,11 @@ from ragkit.chunking import Chunk, chunk_corpus
 from ragkit.corpus import Document
 from ragkit.embedding import Embedder
 from ragkit.golden import Question
-from ragkit.hybrid import BM25Index, rrf
 from ragkit.metrics import QuestionResult
-from ragkit.store import Hit, PgVectorStore
+from ragkit.retrieval import Mode, Retriever
+from ragkit.store import PgVectorStore
 
-CANDIDATES = 20  # each retriever's list before fusion
 TOP_K = 10  # kept per question: recall@5 reads the first 5, MRR all 10
-
-
-class Mode(StrEnum):
-    VECTOR = "vector"
-    BM25 = "bm25"
-    HYBRID = "hybrid"  # vector + BM25 fused with RRF
 
 
 def table_name(embedder: Embedder, size: int) -> str:
@@ -69,28 +61,6 @@ def ingest(
         over_model_limit=sum(c.tokens > embedder.max_tokens for c in chunks),
         seconds=clock() - start,
     )
-
-
-class Retriever:
-    """One chunk table, searchable three ways."""
-
-    def __init__(self, store: PgVectorStore, embedder: Embedder) -> None:
-        self.store, self.embedder = store, embedder
-        self._bm25: BM25Index | None = None
-
-    @property
-    def bm25(self) -> BM25Index:
-        if self._bm25 is None:  # built lazily: vector-only runs never pay for it
-            self._bm25 = BM25Index(self.store.all_chunks())
-        return self._bm25
-
-    def search(self, question: str, mode: Mode, k: int = TOP_K) -> list[Hit]:
-        if mode is Mode.BM25:
-            return self.bm25.search(question, k)
-        vector_hits = self.store.search(self.embedder.embed_query(question), CANDIDATES)
-        if mode is Mode.VECTOR:
-            return vector_hits[:k]
-        return rrf([vector_hits, self.bm25.search(question, CANDIDATES)], k)
 
 
 def evaluate(

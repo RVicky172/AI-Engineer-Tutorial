@@ -3,11 +3,12 @@ from dataclasses import dataclass
 
 from rag_acl.attacks import ATTACKS, MARKERS
 from rag_acl.identity import DIRECTORY, User
-from rag_acl.retriever import Mode, SecureRetriever
+from rag_acl.retriever import SecureRetriever
 from ragkit.corpus import Document
 from ragkit.golden import Question
 from ragkit.metrics import QuestionResult, normalize, summarise
 from ragkit.metrics import Summary as RetrievalSummary
+from ragkit.retrieval import Mode
 from ragkit.store import Hit
 
 

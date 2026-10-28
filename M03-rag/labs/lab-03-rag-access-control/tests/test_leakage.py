@@ -16,7 +16,6 @@ from rag_acl.cli import LABS, main
 from rag_acl.evaluate import golden_as_askers, leak_scan, leaks_in, readable_docs
 from rag_acl.identity import DIRECTORY, AuthenticationError, User, authenticate
 from rag_acl.retriever import (
-    Mode,
     PostFilterRetriever,
     SecureRetriever,
     UnfilteredRetriever,
@@ -29,6 +28,7 @@ from ragkit.embedding import Embedder, HashEmbedder
 from ragkit.generation import NO_ANSWER
 from ragkit.golden import load_golden
 from ragkit.metrics import normalize
+from ragkit.retrieval import Mode
 from ragkit.store import connect
 
 EMB = HashEmbedder(dim=128)

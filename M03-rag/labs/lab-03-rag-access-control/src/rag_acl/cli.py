@@ -12,7 +12,6 @@ from rag_acl.evaluate import golden_as_askers, leak_scan
 from rag_acl.identity import DIRECTORY, User
 from rag_acl.report import render
 from rag_acl.retriever import (
-    Mode,
     PostFilterRetriever,
     SecureRetriever,
     UnfilteredRetriever,
@@ -24,6 +23,7 @@ from ragkit.corpus import load_corpus
 from ragkit.embedding import Embedder, make_embedder
 from ragkit.golden import load_golden
 from ragkit.metrics import Summary
+from ragkit.retrieval import Mode
 from ragkit.store import PgVectorStore, connect
 
 LABS = Path(__file__).resolve().parents[3]

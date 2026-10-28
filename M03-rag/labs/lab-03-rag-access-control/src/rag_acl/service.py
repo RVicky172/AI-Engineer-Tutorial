@@ -6,8 +6,9 @@ question reaches the model, the context already contains only what this user may
 from llm_common import MessagesAPI
 
 from rag_acl.identity import authenticate
-from rag_acl.retriever import Mode, SecureRetriever
+from rag_acl.retriever import SecureRetriever
 from ragkit.generation import NO_ANSWER, Answer, answer, check_citations
+from ragkit.retrieval import Mode
 
 
 def ask(

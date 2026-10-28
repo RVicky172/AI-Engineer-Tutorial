@@ -12,9 +12,9 @@ import psycopg
 from pgvector.psycopg import register_vector
 from psycopg import sql
 
-from ragkit.chunking import Chunk
+from ragkit.chunking import Chunk, chunk_corpus
 from ragkit.corpus import Document
-from ragkit.embedding import Vectors
+from ragkit.embedding import Embedder, Vectors
 
 DEFAULT_DSN = "postgresql://rag:rag@localhost:5432/rag"  # docker-compose.yml; local only
 TABLE_NAME = re.compile(r"^[a-z_][a-z0-9_]{0,62}$")
@@ -146,3 +146,23 @@ class PgVectorStore:
             sql.SQL("SELECT chunk_id, doc_id, chunk_text FROM {} ORDER BY id").format(self.table)
         ).fetchall()
         return [(r[0], r[1], r[2]) for r in rows]
+
+
+def build_table(
+    conn: psycopg.Connection[Any],
+    docs: Sequence[Document],
+    embedder: Embedder,
+    *,
+    table: str,
+    size: int,
+    overlap: float = 0.125,
+) -> PgVectorStore:
+    """Chunk, embed and load the corpus into a fresh table with an HNSW index."""
+    chunks = chunk_corpus(
+        list(docs), max_tokens=size, overlap_tokens=int(size * overlap), count=embedder.count_tokens
+    )
+    store = PgVectorStore(conn, table, embedder.dim)
+    store.reset()
+    store.add(chunks, embedder.embed_documents([c.text for c in chunks]), docs)
+    store.build_index()
+    return store
