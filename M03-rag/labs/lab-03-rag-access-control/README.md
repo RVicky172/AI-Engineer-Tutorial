@@ -1,6 +1,8 @@
 # M03 · Lab 03: Document-level access control
 
 > Module: [RAG: Retrieval-Augmented Generation](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`, `results.md`). Try the lab yourself first for 60-90 minutes, then compare.
 
 ## Goal
 Add metadata-based access control so user A cannot retrieve user B's documents, and write a test that proves it.

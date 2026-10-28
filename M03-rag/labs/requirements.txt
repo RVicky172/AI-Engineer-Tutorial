@@ -25,3 +25,4 @@ moto
 -e ../../M02-llm-fundamentals/labs/common
 -e ./common
 -e ./lab-01-pgvector-rag-chunking
+-e ./lab-03-rag-access-control

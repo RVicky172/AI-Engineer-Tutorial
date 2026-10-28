@@ -6,7 +6,7 @@ import numpy as np
 import psycopg
 import pytest
 
-from ragkit.chunking import chunk_corpus
+from ragkit.chunking import Chunk, chunk_corpus
 from ragkit.corpus import Document
 from ragkit.embedding import HashEmbedder, LocalEmbedder, TitanEmbedder, make_embedder
 from ragkit.hybrid import BM25Index, rrf, tokenize
@@ -151,3 +151,28 @@ def test_store_round_trip_with_acl_filter(conn: psycopg.Connection[Any]) -> None
         store.add(chunks, emb.embed_documents(["x"]), docs)
     with pytest.raises(ValueError, match="invalid table name"):
         PgVectorStore(conn, "x; DROP TABLE y", 3)
+
+
+def test_iterative_scan_returns_rows_an_hnsw_filter_would_hide(
+    conn: psycopg.Connection[Any],
+) -> None:
+    """2,000 chunks, 5 readable by `security`. The index returns its 40 nearest rows, the filter
+    removes them all, and without iterative scan the user gets nothing at all."""
+    rng = np.random.default_rng(0)
+    dim = 32
+    docs = [make_doc("x", "pub", ("all-staff",)), make_doc("x", "sec", ("security",))]
+    chunks = [Chunk("sec" if i < 5 else "pub", i, f"c{i}", "", 1) for i in range(2000)]
+    store = PgVectorStore(conn, "test_ragkit_hnsw_trap", dim)
+    store.reset()
+    store.add(chunks, rng.normal(size=(2000, dim)).astype(np.float32), docs)
+    store.build_index()
+    conn.execute("ANALYZE test_ragkit_hnsw_trap")
+    conn.execute("SET enable_seqscan = off")  # small tables use a seq scan; force the index
+    try:
+        q = rng.normal(size=dim).astype(np.float32)
+        assert store.search(q, 5, groups=["security"], iterative_scan=False) == []
+        found = store.search(q, 5, groups=["security"])
+        assert [h.doc_id for h in found] == ["sec"] * 5
+        assert store.readable_chunk_ids(["security"]) == {f"sec#{i}" for i in range(5)}
+    finally:
+        conn.execute("RESET enable_seqscan")
