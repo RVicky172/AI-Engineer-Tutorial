@@ -1,0 +1,8 @@
+langgraph
+langchain-aws
+langgraph-checkpoint-sqlite
+strands-agents
+strands-agents-tools
+httpx
+pydantic>=2
+pytest

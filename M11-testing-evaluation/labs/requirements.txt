@@ -1,0 +1,7 @@
+pytest
+pytest-asyncio
+pyyaml
+pydantic>=2
+scikit-learn
+locust
+boto3

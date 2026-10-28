@@ -1,0 +1,10 @@
+mcp[cli]
+httpx
+fastapi
+uvicorn
+pyjwt
+pydantic>=2
+strands-agents
+pytest
+respx
+a2a-sdk

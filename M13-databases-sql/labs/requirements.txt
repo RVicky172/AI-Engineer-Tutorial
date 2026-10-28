@@ -1,0 +1,6 @@
+psycopg[binary]
+sqlglot
+boto3
+pydantic>=2
+pytest
+cachetools

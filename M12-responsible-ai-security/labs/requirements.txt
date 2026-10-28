@@ -1,0 +1,4 @@
+pytest
+pyyaml
+boto3
+pydantic>=2

@@ -1,0 +1,10 @@
+psycopg[binary]
+pgvector
+boto3
+numpy
+rank-bm25
+pypdf
+sentence-transformers
+pydantic>=2
+pytest
+pyyaml

@@ -1,0 +1,7 @@
+boto3
+anthropic
+pydantic>=2
+pyyaml
+python-dotenv
+pytest
+tabulate

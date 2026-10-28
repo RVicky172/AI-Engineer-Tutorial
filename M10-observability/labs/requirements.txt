@@ -1,0 +1,7 @@
+opentelemetry-sdk
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation-fastapi
+opentelemetry-instrumentation-httpx
+opentelemetry-instrumentation-botocore
+aws-embedded-metrics
+boto3

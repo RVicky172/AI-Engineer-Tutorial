@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+sse-starlette
+pydantic>=2
+pydantic-settings
+httpx
+structlog
+boto3
+pytest
+pytest-asyncio
+pytest-cov
+respx
+moto[s3,secretsmanager]
+ruff
+mypy
