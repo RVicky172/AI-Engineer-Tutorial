@@ -1,10 +1,27 @@
+# One shared venv for all M03 labs. Run from this labs/ folder:
+#   pip install -r requirements.txt   (or: uv pip install -r requirements.txt)
 psycopg[binary]
 pgvector
-boto3
 numpy
 rank-bm25
 pypdf
-sentence-transformers
+sentence-transformers  # local embeddings (CPU is fine for this corpus)
 pydantic>=2
-pytest
 pyyaml
+boto3
+anthropic[bedrock]>=2.3
+python-dotenv
+
+# Dev tools: tests, coverage, lint, types, AWS mocks for Lab 02
+pytest
+pytest-cov
+ruff
+mypy
+types-PyYAML
+boto3-stubs[bedrock-runtime,bedrock-agent,bedrock-agent-runtime,s3]
+moto
+
+# M02's provider switch and fake model, then the shared RAG package and the labs, editable
+-e ../../M02-llm-fundamentals/labs/common
+-e ./common
+-e ./lab-01-pgvector-rag-chunking

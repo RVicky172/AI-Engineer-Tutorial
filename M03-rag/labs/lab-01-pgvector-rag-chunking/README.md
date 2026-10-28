@@ -1,6 +1,8 @@
 # M03 · Lab 01: RAG pipeline on pgvector + chunk-size experiment
 
 > Module: [RAG: Retrieval-Augmented Generation](../../README.md) · Study first: [docs/guide.md](../../docs/guide.md) · Environment: [labs/SETUP.md](../SETUP.md)
+>
+> **Reference solution included** (`src/`, `tests/`, `NOTES.md`, `results.md`). The shared corpus and golden set are in `labs/corpus/` and `labs/golden.yaml`; the reusable pieces are in `labs/common/` (`ragkit`). Try the lab yourself first for 60-90 minutes, then compare.
 
 ## Goal
 Build a RAG pipeline over 50-100 internal-style documents using pgvector. Compare 3 chunk sizes and report recall@5 for each.

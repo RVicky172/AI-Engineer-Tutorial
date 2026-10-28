@@ -1,0 +1,211 @@
+# Golden set for the M03 labs: 25 questions over corpus/.
+#
+# relevant: every doc_id (file name without extension) that contains the answer. recall@k counts a
+#   question as found if ANY relevant doc is in the top k; MRR uses the rank of the first one.
+# evidence: exact phrases (case, whitespace and markdown emphasis ignored) that contain the
+#   answer. evidence@5 asks whether a retrieved CHUNK holds the answer, not just its document.
+# groups: who asks. Lab 01 ignores it (admin view); Lab 03 retrieves with these groups, so every
+#   relevant doc must be readable by them.
+# tags: keyword = exact identifiers (error codes, contract numbers), where vector search is weak;
+#   paraphrase = user words that don't match the doc; multi = answer spans documents; pdf.
+
+questions:
+  - id: q01
+    question: Users get VPN-ERR-812 when they connect. What does it mean and what should they do?
+    relevant: [kb-vpn-gateway-unreachable, rb-vpn-gateway-failover]
+    evidence: ["means all licences are in use", "licence exhausted"]
+    answer: All VPN licences are in use (the backup gateway has only 1,500 seats). Users should try again in 15 minutes; during a failover, ask non-essential users to disconnect.
+    groups: [all-staff, it-ops]
+    tags: [keyword]
+
+  - id: q02
+    question: How many users can the backup VPN gateway take?
+    relevant: [rb-vpn-gateway-failover, datacenter-maintenance-2026]
+    evidence: ["It holds 1,500 seats", "limit of 1,500 VPN seats"]
+    answer: 1,500 seats on vpn-gw-01 in Mumbai, against 2,500 on the primary.
+    groups: [all-staff, it-ops]
+    tags: [paraphrase]
+
+  - id: q03
+    question: Mail on my mobile stopped updating. How do I fix it?
+    relevant: [kb-outlook-mobile-sync]
+    evidence: ["Reset account"]
+    answer: Reset the account in Outlook settings; after a password change remove and re-add the account; check the phone is compliant in Company Portal.
+    groups: [all-staff]
+    tags: [paraphrase]
+
+  - id: q04
+    question: I clicked a link in an email and typed my password on the page. What do I do now?
+    relevant: [kb-report-phishing]
+    evidence: ["Disconnect your device from the network"]
+    answer: Disconnect the device from the network without shutting it down, call the service desk on 4357 and say "security incident"; they reset the password and revoke sessions.
+    groups: [all-staff]
+    tags: [paraphrase]
+
+  - id: q05
+    question: What caused INC0011207, the intranet outage after the DNS change?
+    relevant: [inc-2026-07-dns-misconfig, rb-dns-resolver-cache-flush]
+    evidence: ["rndc flushname intranet.acme.example"]
+    answer: A typo in the new CNAME target with a 24-hour TTL; after the fix, the internal resolvers kept serving the cached broken answer until they were flushed with rndc flushname.
+    groups: [it-ops]
+    tags: [keyword, multi]
+
+  - id: q06
+    question: Can I restart the ERP application servers during month-end close?
+    relevant: [rb-erp-app-restart, pol-change-management]
+    evidence: ["blocked during month-end close", "No normal changes to ERP"]
+    answer: No. ERP restarts are blocked during month-end close (last 2 and first 3 working days) and during any ERP change freeze; escalate to erp-support instead.
+    groups: [it-ops]
+    tags: [multi]
+
+  - id: q07
+    question: An invoice failed with ERP-4012. Was it posted, and should I try again?
+    relevant: [kb-erp-invoice-posting-error]
+    evidence: ["so there is no risk of a duplicate"]
+    answer: It was not posted, so retrying after 5 minutes is safe; do not post it from a second session meanwhile. Raise a ticket if it continues for more than 30 minutes.
+    groups: [all-staff]
+    tags: [keyword]
+
+  - id: q08
+    question: Is it safe to re-run the AR_DUNNING batch job after it failed?
+    relevant: [rb-erp-batch-job-rerun]
+    evidence: ["customers get duplicate reminders"]
+    answer: No. Re-running AR_DUNNING sends customers duplicate payment reminders.
+    groups: [it-ops]
+    tags: [keyword]
+
+  - id: q09
+    question: Why did orders keep failing long after the database had already switched over in June?
+    relevant: [inc-2026-06-orders-db-failover]
+    evidence: ["cached the database's IP address"]
+    answer: The checkout service cached the database IP address (JVM DNS cache TTL forever) and kept connecting to the old primary until the pods were restarted.
+    groups: [it-ops]
+    tags: [paraphrase]
+
+  - id: q10
+    question: The orders database is running out of storage even though autoscaling is on. What should I check first?
+    relevant: [rb-orders-db-disk-full, inc-2026-08-orders-db-storage]
+    evidence: ["An inactive slot keeps WAL forever", "An inactive slot prevents PostgreSQL from removing old WAL files"]
+    answer: Check for inactive replication slots, which keep WAL forever; an abandoned slot caused the August 2026 incident.
+    groups: [it-ops]
+    tags: [multi]
+
+  - id: q11
+    question: A pod keeps restarting and its last exit code was 137. What does that mean?
+    relevant: [rb-k8s-crashloopbackoff]
+    evidence: ["OOMKilled"]
+    answer: The container was killed, usually OOMKilled (memory limit) or a failed liveness probe; check the memory limit and the pod events.
+    groups: [it-ops]
+    tags: [keyword]
+
+  - id: q12
+    question: Laptops on one floor connect to Wi-Fi but get no IP address. Should I reboot the Wi-Fi controller?
+    relevant: [rb-wifi-controller-reboot, inc-2026-07-wifi-floor5]
+    evidence: ["Check the DHCP scope for that VLAN", "the floor's DHCP scope"]
+    answer: No. Check the DHCP scope for that VLAN first (scope exhaustion caused the floor 5 outage) and the floor switch PoE; rebooting the controller does not help.
+    groups: [it-ops]
+    tags: [multi, paraphrase]
+
+  - id: q13
+    question: How do I set up my authenticator on a new phone when the old phone is lost?
+    relevant: [kb-mfa-new-phone]
+    evidence: ["Temporary Access Pass"]
+    answer: Call the service desk; after verifying you with your manager they issue a Temporary Access Pass valid for 8 hours, which you use to add the new phone.
+    groups: [all-staff]
+    tags: [paraphrase]
+
+  - id: q14
+    question: My laptop is asking for a 48-digit key before Windows starts.
+    relevant: [kb-bitlocker-recovery-key]
+    evidence: ["myaccount.acme.example/device-keys"]
+    answer: That is the BitLocker recovery key; get it at myaccount.acme.example/device-keys using the Key ID, or call the service desk.
+    groups: [all-staff]
+    tags: [paraphrase]
+
+  - id: q15
+    question: What does printer error E-340 mean?
+    relevant: [kb-printer-error-codes]
+    evidence: ["fuser error"]
+    answer: A fuser error. Switch the printer off for 10 minutes; if it comes back, report it to IT.
+    groups: [all-staff]
+    tags: [keyword]
+
+  - id: q16
+    question: Who is in charge when there's a big outage, and how often do we update people about it?
+    relevant: [rb-major-incident-process]
+    evidence: ["the on-call duty manager"]
+    answer: The incident commander, who is the on-call duty manager; P1 status updates go out every 30 minutes.
+    groups: [it-ops]
+    tags: []
+
+  - id: q17
+    question: What is the response target for a P2 incident?
+    relevant: [pol-incident-severity]
+    evidence: ["30 minutes, business hours"]
+    answer: 30 minutes during business hours, with resolution within 8 business hours.
+    groups: [all-staff]
+    tags: []
+
+  - id: q18
+    question: How much can I spend on a hotel per night in Mumbai?
+    relevant: [travel-expense-policy]
+    evidence: ["up to INR 9,000"]
+    answer: Up to INR 9,000 per night.
+    groups: [all-staff]
+    tags: [pdf]
+
+  - id: q19
+    question: What is the ERP vendor's restore target for a Severity 1 case, and do we get service credits if they miss it?
+    relevant: [vendor-sla-summary]
+    evidence: ["5 percent of the monthly fee"]
+    answer: 8 hours; a 5% credit of the monthly fee per missed target, capped at 25%, claimed within 30 days.
+    groups: [it-ops]
+    tags: [pdf]
+
+  - id: q20
+    question: When does routine maintenance normally happen in the main data centre?
+    relevant: [datacenter-maintenance-2026]
+    evidence: ["second Saturday of every month"]
+    answer: The second Saturday of every month, 22:00 to 02:00 IST.
+    groups: [it-ops]
+    tags: [pdf]
+
+  - id: q21
+    question: Why did the SAML signing certificate expire in April, and what changed afterwards?
+    relevant: [inc-2026-04-sso-cert-expiry, rb-sso-saml-cert-rotation]
+    evidence: ["nobody owned the rotation sheet", "the rotation sheet had no owner"]
+    answer: The reminder went to a former employee and the rotation sheet had no owner; now an overlap rotation starts six weeks before expiry with a named owner, and SAML certificates are monitored.
+    groups: [it-ops]
+    tags: [multi]
+
+  - id: q22
+    question: Password reset emails arrived hours late during the month-end invoice run. How do we stop that happening again?
+    relevant: [inc-2026-05-mail-relay-backlog, rb-mail-relay-queue-drain]
+    evidence: ["separate transport with priority"]
+    answer: Invoices are sent in batches of 2,000 per 10 minutes, password resets use a separate priority transport, the provider rate limit was raised, and nobody flushes the queue repeatedly while throttled.
+    groups: [it-ops]
+    tags: [multi]
+
+  - id: q23
+    question: How long do we keep daily backups of the file server?
+    relevant: [rb-backup-restore-file-server]
+    evidence: ["35 days"]
+    answer: 35 days (snapshots 7 days, monthly backups 12 months).
+    groups: [it-ops]
+    tags: []
+
+  - id: q24
+    question: How did we find out the file server backups were failing, and what alerting was added?
+    relevant: [inc-2026-09-backup-failure]
+    evidence: ["Backup Job State Change"]
+    answer: Only when a restore failed after 11 days; now an EventBridge rule on failed backup jobs pages the infrastructure on-call and the weekly backup report is reviewed.
+    groups: [it-ops]
+    tags: []
+
+  - id: q25
+    question: Can I paste a confidential customer list into a public AI chatbot?
+    relevant: [pol-acceptable-use, pol-data-classification]
+    evidence: ["do not paste Confidential or Restricted data into AI tools"]
+    answer: No. Confidential and Restricted data may not be pasted into AI tools that are not on the approved list.
+    groups: [all-staff]
+    tags: [multi]

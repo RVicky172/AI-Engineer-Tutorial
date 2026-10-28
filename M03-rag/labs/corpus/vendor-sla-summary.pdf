@@ -1,0 +1,32 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 1622 >>
+stream
+BT /F1 10 Tf 13 TL 50 800 Td (IT vendor SLA summary) Tj T* (Owner: IT service management. Review: every June.) Tj T* () Tj T* (This summary lists the support commitments in our main IT vendor contracts. The contract text) Tj T* (always wins; use this page to know what to ask for when you open a vendor case.) Tj T* () Tj T* (Vendor              Contract   Severity 1 response   Severity 1 restore   Support hours) Tj T* (ERP vendor          ERP-2290   30 minutes            8 hours              24x7) Tj T* (VPN gateway vendor  NW-7781    1 hour                next business day    24x7 for Sev 1) Tj T* (AWS Support         Business   1 hour                not committed        24x7) Tj T* (Smart host \(mail\)   MAIL-1180  2 hours               not committed        business hours) Tj T* (Printer service     PRN-0450   4 business hours      2 business days      business hours) Tj T* (IR retainer         SEC-0042   2 hours on site call  not applicable       24x7) Tj T* () Tj T* (How to open a case) Tj T* (1. Use the vendor portal and quote the contract number. Phone lines are for Severity 1 only.) Tj T* (2. Severity 1 means production down. Opening a Severity 1 for anything else costs us goodwill) Tj T* (   and, for the ERP vendor, an extra fee per case.) Tj T* (3. Record the vendor case number in the incident ticket.) Tj T* () Tj T* (Service credits) Tj T* (The ERP vendor pays a service credit of 5 percent of the monthly fee for each missed Severity 1) Tj T* (restore target, capped at 25 percent. Claim it within 30 days through the vendor manager.) Tj T* (No other contract has service credits.) Tj T* ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001915 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1985
+%%EOF

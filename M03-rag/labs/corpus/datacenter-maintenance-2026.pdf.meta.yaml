@@ -1,0 +1,5 @@
+title: Data centre maintenance windows H2 2026
+type: schedule
+service: infrastructure
+updated: 2026-06-20
+allowed_groups: [it-ops]
